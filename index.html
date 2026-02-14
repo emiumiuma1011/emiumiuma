@@ -2,12 +2,12 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>Midnight Rose</title>
+<title>Midnight Rose Fixed</title>
 <style>
 body {
   margin: 0;
   overflow: hidden;
-  background: radial-gradient(circle at center, #0b0f1a 0%, #000000 80%);
+  background: radial-gradient(circle at center, #070b16 0%, #000 90%);
 }
 </style>
 </head>
@@ -20,95 +20,105 @@ import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.158/example
 import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.158/examples/jsm/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.158/examples/jsm/postprocessing/UnrealBloomPass.js";
 
-// 场景
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
 const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 1, 1000);
 camera.position.z = 120;
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(innerWidth, innerHeight);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.0;
 document.body.appendChild(renderer.domElement);
 
-// Bloom
+// Bloom 设置（降低强度防止过曝）
 const composer = new EffectComposer(renderer);
 composer.addPass(new RenderPass(scene, camera));
+
 const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(innerWidth, innerHeight),
-    1.5, 0.6, 0.1
+  new THREE.Vector2(innerWidth, innerHeight),
+  0.8,   // 强度 ↓
+  0.4,
+  0.85
 );
 composer.addPass(bloomPass);
 
-// 粒子数量
+// ===== 粒子 =====
 const COUNT = 2000;
 const geometry = new THREE.BufferGeometry();
 const positions = new Float32Array(COUNT * 3);
 const targets = new Float32Array(COUNT * 3);
 
-// 初始化随机星空位置
+// 初始随机星空
 for (let i = 0; i < COUNT; i++) {
-    positions[i*3] = (Math.random() - 0.5) * 400;
-    positions[i*3+1] = (Math.random() - 0.5) * 400;
-    positions[i*3+2] = (Math.random() - 0.5) * 400;
+  positions[i*3] = (Math.random()-0.5) * 400;
+  positions[i*3+1] = (Math.random()-0.5) * 400;
+  positions[i*3+2] = (Math.random()-0.5) * 400;
 }
 
-// 生成玫瑰形状函数
-function generateRoseTarget() {
-    for (let i = 0; i < COUNT; i++) {
-        let t = i / COUNT * Math.PI * 8;
+// 玫瑰目标形状
+for (let i = 0; i < COUNT; i++) {
 
-        let r = 20 * Math.sin(5 * t);  // 花瓣波动
-        let x = r * Math.cos(t);
-        let y = r * Math.sin(t);
-        let z = (i % 200 < 150) ? 0 : -i * 0.02;  // 部分粒子下沉形成枝干
+  let ratio = i / COUNT;
+  let angle = ratio * Math.PI * 10;
+  let radius = 25 * Math.sin(4 * angle);
 
-        targets[i*3] = x;
-        targets[i*3+1] = y + 20;
-        targets[i*3+2] = z;
-    }
+  let x = radius * Math.cos(angle);
+  let y = radius * Math.sin(angle);
+  let z = 0;
+
+  // 一部分做枝干
+  if (ratio > 0.75) {
+    x = 0;
+    y = -ratio * 80;
+    z = 0;
+  }
+
+  targets[i*3] = x;
+  targets[i*3+1] = y + 30;
+  targets[i*3+2] = z;
 }
-
-generateRoseTarget();
 
 geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
 
 const material = new THREE.PointsMaterial({
-    size: 2,
-    transparent: true,
-    opacity: 0.9,
-    color: new THREE.Color(0xbfaaff)
+  size: 1.8,
+  color: 0xb8b5ff,
+  transparent: true,
+  opacity: 0.9,
+  depthWrite: false
 });
 
 const points = new THREE.Points(geometry, material);
 scene.add(points);
 
-// 动画
+// ===== 动画 =====
 function animate() {
-    requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 
-    const pos = geometry.attributes.position.array;
+  const pos = geometry.attributes.position.array;
 
-    for (let i = 0; i < COUNT; i++) {
-        pos[i*3] += (targets[i*3] - pos[i*3]) * 0.02;
-        pos[i*3+1] += (targets[i*3+1] - pos[i*3+1]) * 0.02;
-        pos[i*3+2] += (targets[i*3+2] - pos[i*3+2]) * 0.02;
-    }
+  for (let i = 0; i < COUNT; i++) {
+    pos[i*3] += (targets[i*3] - pos[i*3]) * 0.02;
+    pos[i*3+1] += (targets[i*3+1] - pos[i*3+1]) * 0.02;
+    pos[i*3+2] += (targets[i*3+2] - pos[i*3+2]) * 0.02;
+  }
 
-    geometry.attributes.position.needsUpdate = true;
+  geometry.attributes.position.needsUpdate = true;
 
-    // 微旋转
-    points.rotation.y += 0.003;
+  points.rotation.y += 0.002;
 
-    composer.render();
+  composer.render();
 }
 
 animate();
 
-// 响应窗口变化
 window.addEventListener("resize", () => {
-    camera.aspect = innerWidth/innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(innerWidth, innerHeight);
-    composer.setSize(innerWidth, innerHeight);
+  camera.aspect = innerWidth/innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+  composer.setSize(innerWidth, innerHeight);
 });
 
 </script>
