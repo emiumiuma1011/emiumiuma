@@ -1,58 +1,95 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-<meta charset="UTF-8" />
-<title>Y2K Crystal Rose</title>
+<meta charset="UTF-8">
+<title>Blue Rose Bouquet</title>
 <style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background: radial-gradient(circle at center, #0b102f, #000);
-  }
-  canvas { display: block; }
+body {
+  background: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.bouquet {
+  position: relative;
+  width: 200px;
+  height: 300px;
+}
+
+/* 花朵 */
+.rose {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 30% 30%, #6ec6ff, #1e88e5);
+  border-radius: 50%;
+}
+
+/* 花瓣層次 */
+.rose::before,
+.rose::after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 70% 70%, #64b5f6, #1565c0);
+  border-radius: 50%;
+}
+
+.rose::before {
+  transform: rotate(45deg);
+}
+
+.rose::after {
+  transform: rotate(-45deg);
+}
+
+/* 花莖 */
+.stem {
+  position: absolute;
+  width: 6px;
+  height: 120px;
+  background: #2e7d32;
+  left: 27px;
+  top: 60px;
+}
+
+/* 三朵玫瑰位置 */
+.rose1 { left: 20px; top: 20px; }
+.rose2 { left: 80px; top: 10px; }
+.rose3 { left: 140px; top: 25px; }
+
+/* 對應花莖 */
+.stem1 { left: 47px; top: 80px; }
+.stem2 { left: 107px; top: 70px; }
+.stem3 { left: 167px; top: 85px; }
+
+/* 綁帶 */
+.ribbon {
+  position: absolute;
+  width: 80px;
+  height: 30px;
+  background: #1976d2;
+  border-radius: 10px;
+  bottom: 20px;
+  left: 60px;
+}
 </style>
 </head>
+
 <body>
+<div class="bouquet">
+  <div class="rose rose1"></div>
+  <div class="rose rose2"></div>
+  <div class="rose rose3"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <div class="stem stem1"></div>
+  <div class="stem stem2"></div>
+  <div class="stem stem3"></div>
 
-<script>
-const scene = new THREE.Scene();
-
-const camera = new THREE.PerspectiveCamera(
-  60,
-  window.innerWidth / window.innerHeight,
-  0.1,
-  1000
-);
-camera.position.z = 8;
-
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-document.body.appendChild(renderer.domElement);
-
-// ===== 光源 =====
-const light1 = new THREE.PointLight(0x9bdcff, 3);
-light1.position.set(5, 5, 5);
-scene.add(light1);
-
-const light2 = new THREE.PointLight(0xffffff, 2);
-light2.position.set(-5, -3, 5);
-scene.add(light2);
-
-// ===== 水晶材质 =====
-const roseMaterial = new THREE.MeshPhysicalMaterial({
-  color: 0x8fd3ff,
-  metalness: 0.2,
-  roughness: 0.05,
-  transmission: 0.9,
-  thickness: 0.6,
-  transparent: true,
-  opacity: 0.95
-});
-
-// ===== 创建花瓣 =====
-function createPetal(scale = 1) {
-  const shape = new THREE.Shape();
-  shape.moveTo(0, 0);
+  <div class="ribbon"></div>
+</div>
+</body>
+</html>
