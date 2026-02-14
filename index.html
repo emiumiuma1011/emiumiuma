@@ -15,9 +15,6 @@
 <body>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/postprocessing/EffectComposer.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/postprocessing/RenderPass.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/examples/js/postprocessing/UnrealBloomPass.js"></script>
 
 <script>
 const scene = new THREE.Scene();
@@ -44,38 +41,18 @@ const light2 = new THREE.PointLight(0xffffff, 2);
 light2.position.set(-5, -3, 5);
 scene.add(light2);
 
-// ===== Y2K 水晶材质 =====
+// ===== 水晶材质 =====
 const roseMaterial = new THREE.MeshPhysicalMaterial({
   color: 0x8fd3ff,
-  metalness: 0.3,
+  metalness: 0.2,
   roughness: 0.05,
-  transmission: 1,
-  thickness: 0.8,
-  clearcoat: 1,
-  clearcoatRoughness: 0,
+  transmission: 0.9,
+  thickness: 0.6,
   transparent: true,
   opacity: 0.95
 });
 
-// ===== 创建单个花瓣 =====
+// ===== 创建花瓣 =====
 function createPetal(scale = 1) {
   const shape = new THREE.Shape();
   shape.moveTo(0, 0);
-  shape.bezierCurveTo(0.5, 1.2, 1.2, 1.2, 0, 2);
-  shape.bezierCurveTo(-1.2, 1.2, -0.5, 1.2, 0, 0);
-
-  const geometry = new THREE.ExtrudeGeometry(shape, {
-    depth: 0.1,
-    bevelEnabled: true,
-    bevelThickness: 0.05,
-    bevelSize: 0.05,
-    bevelSegments: 3
-  });
-
-  const petal = new THREE.Mesh(geometry, roseMaterial);
-  petal.scale.set(scale, scale, scale);
-  petal.rotation.x = Math.PI / 2;
-  return petal;
-}
-
-// ===== 组装玫瑰
