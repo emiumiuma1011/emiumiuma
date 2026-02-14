@@ -2,94 +2,85 @@
 <html lang="zh">
 <head>
 <meta charset="UTF-8">
-<title>Blue Rose Bouquet</title>
+<title>Realistic Blue Rose Bouquet</title>
 <style>
-body {
-  background: #f5f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+body{
+  background:#f4f6f9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
-
-.bouquet {
-  position: relative;
-  width: 200px;
-  height: 300px;
-}
-
-/* 花朵 */
-.rose {
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle at 30% 30%, #6ec6ff, #1e88e5);
-  border-radius: 50%;
-}
-
-/* 花瓣層次 */
-.rose::before,
-.rose::after {
-  content: "";
-  position: absolute;
-  width: 60px;
-  height: 60px;
-  background: radial-gradient(circle at 70% 70%, #64b5f6, #1565c0);
-  border-radius: 50%;
-}
-
-.rose::before {
-  transform: rotate(45deg);
-}
-
-.rose::after {
-  transform: rotate(-45deg);
-}
-
-/* 花莖 */
-.stem {
-  position: absolute;
-  width: 6px;
-  height: 120px;
-  background: #2e7d32;
-  left: 27px;
-  top: 60px;
-}
-
-/* 三朵玫瑰位置 */
-.rose1 { left: 20px; top: 20px; }
-.rose2 { left: 80px; top: 10px; }
-.rose3 { left: 140px; top: 25px; }
-
-/* 對應花莖 */
-.stem1 { left: 47px; top: 80px; }
-.stem2 { left: 107px; top: 70px; }
-.stem3 { left: 167px; top: 85px; }
-
-/* 綁帶 */
-.ribbon {
-  position: absolute;
-  width: 80px;
-  height: 30px;
-  background: #1976d2;
-  border-radius: 10px;
-  bottom: 20px;
-  left: 60px;
+svg{
+  width:500px;
 }
 </style>
 </head>
-
 <body>
-<div class="bouquet">
-  <div class="rose rose1"></div>
-  <div class="rose rose2"></div>
-  <div class="rose rose3"></div>
 
-  <div class="stem stem1"></div>
-  <div class="stem stem2"></div>
-  <div class="stem stem3"></div>
+<svg viewBox="0 0 500 600">
 
-  <div class="ribbon"></div>
-</div>
+  <!-- 定義漸層 -->
+  <defs>
+    <radialGradient id="bluePetal" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#9ad8ff"/>
+      <stop offset="60%" stop-color="#3aa0ff"/>
+      <stop offset="100%" stop-color="#0b5ed7"/>
+    </radialGradient>
+
+    <linearGradient id="stemGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2e7d32"/>
+      <stop offset="100%" stop-color="#145a1f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ===== 第一朵玫瑰 ===== -->
+  <g transform="translate(160,150)">
+    <!-- 外層花瓣 -->
+    <path d="M0,-40 C30,-50 50,-20 40,10 C20,40 -20,40 -40,10 C-50,-20 -30,-50 0,-40Z"
+          fill="url(#bluePetal)" />
+    <path d="M-35,-15 C-10,-60 30,-50 35,-10 C40,20 10,45 -15,35 C-40,25 -45,0 -35,-15Z"
+          fill="url(#bluePetal)" opacity="0.9"/>
+    <!-- 內層花瓣 -->
+    <path d="M0,-20 C15,-25 25,-5 15,10 C5,25 -5,25 -15,10 C-25,-5 -15,-25 0,-20Z"
+          fill="#bfe6ff"/>
+  </g>
+
+  <!-- 花莖 -->
+  <rect x="155" y="190" width="10" height="220" fill="url(#stemGrad)" />
+
+  <!-- ===== 第二朵玫瑰 ===== -->
+  <g transform="translate(250,130)">
+    <path d="M0,-40 C30,-50 50,-20 40,10 C20,40 -20,40 -40,10 C-50,-20 -30,-50 0,-40Z"
+          fill="url(#bluePetal)" />
+    <path d="M-35,-15 C-10,-60 30,-50 35,-10 C40,20 10,45 -15,35 C-40,25 -45,0 -35,-15Z"
+          fill="url(#bluePetal)" opacity="0.9"/>
+    <path d="M0,-20 C15,-25 25,-5 15,10 C5,25 -5,25 -15,10 C-25,-5 -15,-25 0,-20Z"
+          fill="#bfe6ff"/>
+  </g>
+
+  <rect x="245" y="170" width="10" height="240" fill="url(#stemGrad)" />
+
+  <!-- ===== 第三朵玫瑰 ===== -->
+  <g transform="translate(340,150)">
+    <path d="M0,-40 C30,-50 50,-20 40,10 C20,40 -20,40 -40,10 C-50,-20 -30,-50 0,-40Z"
+          fill="url(#bluePetal)" />
+    <path d="M-35,-15 C-10,-60 30,-50 35,-10 C40,20 10,45 -15,35 C-40,25 -45,0 -35,-15Z"
+          fill="url(#bluePetal)" opacity="0.9"/>
+    <path d="M0,-20 C15,-25 25,-5 15,10 C5,25 -5,25 -15,10 C-25,-5 -15,-25 0,-20Z"
+          fill="#bfe6ff"/>
+  </g>
+
+  <rect x="335" y="190" width="10" height="220" fill="url(#stemGrad)" />
+
+  <!-- 葉子 -->
+  <ellipse cx="160" cy="300" rx="40" ry="15" fill="#2e7d32" transform="rotate(-30 160 300)" />
+  <ellipse cx="300" cy="320" rx="40" ry="15" fill="#2e7d32" transform="rotate(30 300 320)" />
+
+  <!-- 綁帶 -->
+  <ellipse cx="250" cy="420" rx="80" ry="30" fill="#1565c0" opacity="0.8"/>
+
+</svg>
+
 </body>
 </html>
